@@ -3,3 +3,6 @@
 composer.json
 composer.phar
 prog-web-1.iml
+
+*.zip
+*.docx

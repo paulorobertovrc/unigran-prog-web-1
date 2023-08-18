@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Portfólio 3 | Questão 4</title>
+</head>
+<body>
+    <h1>Formulário (Questão 4)</h1>
+    <h4>Crie um código em PHP que recupere o resultado e o nome armazenados nas variáveis do exercício 3 e apresente ao
+        usuário sempre que ele recarregar a página.</h4>
+    <form method="get" action="index.php">
+        <label>
+            Nome:
+            <input type="text" name="nome" id="nome">
+            <br><br>
+        </label>
+
+        <label>
+            Idade:
+            <input type="number" name="idade">
+            <br><br>
+        </label>
+
+        <input type="submit" value="Enviar">
+    </form>
+    <?php includeonce("index.php"); ?>
+</body>
+</html>
