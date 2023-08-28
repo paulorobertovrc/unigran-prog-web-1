@@ -36,6 +36,50 @@ class Conexao {
         return $resultado;
     }
 
+    public function buscarUsuario($id) {
+        $conn = $this->conectar();
+        $resultado = $conn->query("SELECT * FROM $this->table WHERE id=$id");
+        $conn->close();
+
+        return $resultado->fetch_assoc();
+    }
+
+    public function buscarUsuarioPorEmail($email) {
+        $conn = $this->conectar();
+        $resultado = $conn->query("SELECT * FROM $this->table WHERE email='$email'");
+        $conn->close();
+
+        return $resultado->fetch_assoc();
+    }
+
+    public function cadastrarUsuario($nome, $email) {
+        $conn = $this->conectar();
+
+        if ($this->buscarUsuarioPorEmail($email)) {
+            die("O e-mail " . $email . " já está cadastrado!");
+        }
+
+        if ($nome == "" || $email == "") {
+            echo "Todos os campos do formulário devem ser preenchidos!";
+            exit;
+        }
+
+        $conn->query("INSERT INTO $this->table (nome, email) VALUES ('$nome', '$email')");
+        $conn->close();
+
+        echo "Usuário cadastrado com sucesso!";
+
+        header("Refresh:1");
+    }
+
+    public function alterarUsuario($id, $nome, $email) {
+        $conn = $this->conectar();
+        $conn->query("UPDATE usuarios SET nome='$nome', email='$email' WHERE id=$id");
+        $conn->close();
+
+        echo "Usuário alterado com sucesso!";
+    }
+
     public function verificarEntradaDuplicada($email) {
         $emailsCadastrados = $this->buscar("SELECT `email` FROM usuarios");
         foreach ($emailsCadastrados as $emailCadastrado) {

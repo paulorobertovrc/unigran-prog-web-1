@@ -3,6 +3,7 @@
 
     $conn = new Conexao();
     $tabelaVazia = $conn->tabelaVazia();
+    $usuarioJaExiste = false;
 ?>
 
 <!DOCTYPE html>
@@ -35,18 +36,9 @@
             $email = $_POST['email'];
 
             if (!$conn->verificarEntradaDuplicada($email)) {
-
-                if ($nome == "" || $email == "") {
-                    echo "Todos os campos do formulário devem ser preenchidos!";
-                    exit;
-                }
-
-                $conn->executar("INSERT INTO usuarios (nome, email) VALUES ('$nome', '$email')");
-
-                echo "Usuário cadastrado com sucesso!";
-            } else {
-                echo "O e-mail " . $email . " já está cadastrado!";
+                $conn->cadastrarUsuario($nome, $email);
             }
+
         }
     ?>
 
@@ -67,37 +59,33 @@
         </thead>
         <tbody>
             <?php
-            if (!$tabelaVazia) {
-                $usuariosCadastrados = $conn->buscar("SELECT * FROM usuarios");
+                if (!$tabelaVazia) {
+                    $usuariosCadastrados = $conn->buscar("SELECT * FROM usuarios");
 
-                while ($usuario = $usuariosCadastrados->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $usuario['id'] . "</td>";
-                    echo "<td>" . $usuario['nome'] . "</td>";
-                    echo "<td>" . $usuario['email'] . "</td>";
+                    while ($usuario = $usuariosCadastrados->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $usuario['id'] . "</td>";
+                        echo "<td>" . $usuario['nome'] . "</td>";
+                        echo "<td>" . $usuario['email'] . "</td>";
 
-                    echo "<form method='post' action='index.php'>";
-                    echo "<td><input type='submit' value='Alterar' name='" . $usuario['id'] . "'></td>";
-                    echo "<td><input type='submit' value='Excluir' name='" . $usuario['id'] . "'></td>
-                        </form>";
+                        echo "<form method='get' action='index.php'>";
+                        echo "<td><input type='submit' value='Alterar' name='" . $usuario['id'] . "'></td>";
+                        echo "<td><input type='submit' value='Excluir' name='" . $usuario['id'] . "'></td>
+                            </form>";
 
-                    if (isset($_POST[$usuario['id']])) {
-                        if ($_POST[$usuario['id']] == 'Alterar') {
-                            TODO: // Falta implementar a alteração e a exclusão
-                            // Possivelmente será necessário criar um arquivo para cada questão
-                            include_once 'q1.php';
-                            echo "TESTE ALTERAR - USUÁRIO " . $usuario['id'];
-                        } else if ($_POST[$usuario['id']] == 'Excluir') {
-                            include_once 'q2.php';
-                            echo "TESTE DELETAR - USUÁRIO " . $usuario['id'];
+                        if (isset($_GET[$usuario['id']])) {
+                            if ($_GET[$usuario['id']] == 'Alterar') {
+                                include_once 'q1.php';
+                            } else if ($_GET[$usuario['id']] == 'Excluir') {
+    //                            include_once 'q2.php';
+                            }
                         }
-                    }
 
-                    echo "</tr>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "Não há dados cadastrados na tabela!" . "<br><br>";
                 }
-            } else {
-                echo "Não há dados cadastrados na tabela!" . "<br><br>";
-            }
             ?>
         </tbody>
     </table>
@@ -107,7 +95,7 @@
         banco de dados.
     </h4>
     <?php
-        include_once 'q1.php';
+//        include_once 'q1.php';
     ?>
 
 <!--    <h2>Questão 2</h2>-->
