@@ -74,6 +74,7 @@ $tabelaVazia = $conn->tabelaVazia();
                 $email = $_POST['email'];
 
                 $conn->cadastrarUsuario($nome, $email);
+                header("Location: index.php");
             }
         ?>
     </form>
