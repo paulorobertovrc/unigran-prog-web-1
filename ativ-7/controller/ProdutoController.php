@@ -2,7 +2,7 @@
 require_once 'model/Produto.php';
 require_once 'model/ProdutoDto.php';
 
-class ProdutoController {
+class ProdutoController implements ModelController {
     public function listar() {
         $_REQUEST['produtos'] = Produto::listar();
         require_once 'view/ProdutoView.php';

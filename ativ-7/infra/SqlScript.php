@@ -119,31 +119,23 @@ class SqlScript {
                 ON UPDATE CASCADE;");
     }
 
-    public function verificarSeTabelaExiste($nomeTabela): bool {
-        return $this->conn->getConexao()->query("SHOW TABLES LIKE '$nomeTabela'")->num_rows > 0;
-    }
-
-    public function buscarTabelas():array {
-        return $this->conn->getConexao()->query("SHOW TABLES")->fetch_all();
-    }
-
     public static function criarTabelas() {
-//        self::getInstance()->criarTabelaCliente();
-//        self::getInstance()->criarTabelaCidade();
-//        self::getInstance()->criarTabelaPedido();
-//        self::getInstance()->criarTabelaItemPedido();
+        self::getInstance()->criarTabelaCliente();
+        self::getInstance()->criarTabelaCidade();
+        self::getInstance()->criarTabelaPedido();
+        self::getInstance()->criarTabelaItemPedido();
         self::getInstance()->criarTabelaProduto();
-//        self::getInstance()->criarTabelaVendedor();
-//        self::getInstance()->criarTabelaSetor();
+        self::getInstance()->criarTabelaVendedor();
+        self::getInstance()->criarTabelaSetor();
 
-//        foreach (self::getInstance()->conn->getTabelas() as $tabela) {
-//            if (!self::getInstance()->verificarSeTabelaExiste($tabela)) {
-//                self::getInstance()->alterarTabelaClienteAddFK();
-//                self::getInstance()->alterarTabelaPedidoAddFK();
-//                self::getInstance()->alterarTabelaItemPedidoAddFK();
-//                self::getInstance()->alterarTabelaVendedorAddFK();
-//            }
-//        }
+        foreach (self::getInstance()->conn->getTabelas() as $tabela) {
+            if (!self::getInstance()->conn->verificarSeTabelaExiste($tabela)) {
+                self::getInstance()->alterarTabelaClienteAddFK();
+                self::getInstance()->alterarTabelaPedidoAddFK();
+                self::getInstance()->alterarTabelaItemPedidoAddFK();
+                self::getInstance()->alterarTabelaVendedorAddFK();
+            }
+        }
     }
 
 }

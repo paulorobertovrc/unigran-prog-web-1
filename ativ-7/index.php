@@ -1,6 +1,7 @@
 <?php
 require_once 'infra/ConexaoBD.php';
 require_once 'controller/CadastrarController.php';
+require_once 'controller/ModelController.php';
 
 $conn = ConexaoBD::getInstance();
 ?>
@@ -16,21 +17,26 @@ $conn = ConexaoBD::getInstance();
     <h1>Atividade 7</h1>
 
 <?php
-    $controlador = new CadastrarController();
-    $controlador->exibirFormulario();
+    $controladorCadastro = new CadastrarController();
+    $controladorCadastro->exibirFormulario();
+
+    $modelControllers = array();
 
     foreach ($conn->getTabelas() as $tabela) {
-        if ($conn->tabelaVazia($tabela)) {
-            echo "A tabela está vazia!" . "<br>";
-            break;
+        if (!$conn->tabelaVazia($tabela)) {
+            $controlador = ucfirst($tabela) . "Controller";
+            $modelControllers[] = $controlador;
         }
+    }
 
-        include_once "controller/" . ucfirst($tabela) . "Controller.php";
-        echo "<h2>" . strtoupper($tabela) . "</h2>";
+    foreach ($modelControllers as $controlador) {
+        if (file_exists("controller/" . $controlador . ".php")) {
+            include_once "controller/" . $controlador . ".php";
+            echo "<h2>" . strtoupper(str_replace("Controller", "", $controlador)) . "</h2>";
 
-        $controlador = ucfirst($tabela) . "Controller";
-        $request = new $controlador();
-        $request->listar();
+            $request = new $controlador();
+            $request->listar();
+        }
     }
 ?>
 

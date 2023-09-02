@@ -33,7 +33,11 @@ class ConexaoBD {
     }
 
     private function buscarNomeTabelas(): array {
-        return SqlScript::getInstance()->buscarTabelas();
+        return $this->conn->query("SHOW TABLES")->fetch_all();
+    }
+
+    public function verificarSeTabelaExiste($nomeTabela): bool {
+        return $this->conn->query("SHOW TABLES LIKE '$nomeTabela'")->num_rows > 0;
     }
 
     public static function getInstance(): ConexaoBD {
