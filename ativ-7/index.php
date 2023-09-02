@@ -17,8 +17,6 @@ $conn = ConexaoBD::getInstance();
     <h1>Atividade 7</h1>
 
 <?php
-    $controladorCadastro = new CadastrarController();
-    $controladorCadastro->exibirFormulario();
 
     $modelControllers = array();
 
@@ -33,6 +31,9 @@ $conn = ConexaoBD::getInstance();
         if (file_exists("controller/" . $controlador . ".php")) {
             include_once "controller/" . $controlador . ".php";
             echo "<h2>" . strtoupper(str_replace("Controller", "", $controlador)) . "</h2>";
+
+            $controladorCadastro = new CadastrarController();
+            $controladorCadastro->exibirFormulario();
 
             $request = new $controlador();
             $request->listar();
