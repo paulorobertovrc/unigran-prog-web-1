@@ -120,29 +120,62 @@ class Cliente {
             . $cliente->getNome() . "', '" . $cliente->getEndereco() . "', '" . $cliente->getBairro() . "', '"
             . $cliente->getCep() . "', '" . $cliente->getTelefone() . "', '" . $cliente->getCpf(). "', '"
             . $cliente->getIe() . "', '" . $cliente->getCodCid() . "')";
-        echo $sql;
         $conn->query($sql);
     }
 
     public static function alterar($cliente) {
+        $clienteAlterado = $cliente;
+
+        if ($clienteAlterado->getCodCid() == "") {
+            $clienteAlterado->setCodCid(0);
+        }
+
+        if ($clienteAlterado->getIe() == "") {
+            $clienteAlterado->setIe(0);
+        }
+
         $conn = ConexaoBD::getInstance()->getConexao();
         $sql = "UPDATE cliente SET "
-            . "nome = '" . $cliente->getNome() . "', "
-            . "endereco = '" . $cliente->getEndereco() . "', "
-            . "bairro = '" . $cliente->getBairro() . "', "
-            . "cep = '" . $cliente->getCep() . "', "
-            . "telefone = '" . $cliente->getTelefone() . "', "
-            . "cpf = '" . $cliente->getCpf() . "', "
-            . "ie = '" . $cliente->getIe() . "', "
-            . "codcid = '" . $cliente->getCodCid() . "' "
-            . "WHERE codcli = " . $cliente->getCodcli();
+            . "nome = '" . $clienteAlterado->getNome() . "', "
+            . "endereco = '" . $clienteAlterado->getEndereco() . "', "
+            . "bairro = '" . $clienteAlterado->getBairro() . "', "
+            . "cep = '" . $clienteAlterado->getCep() . "', "
+            . "telefone = '" . $clienteAlterado->getTelefone() . "', "
+            . "cpf = '" . $clienteAlterado->getCpf() . "', "
+            . "ie = '" . $clienteAlterado->getIe() . "' "
+            . "WHERE codcli = '" . $clienteAlterado->getCodcli() . "'";
         $conn->query($sql);
     }
 
     public static function excluir($codcli) {
         $conn = ConexaoBD::getInstance()->getConexao();
-        $sql = "DELETE FROM cliente WHERE codcli = " . $codcli;
+        $sql = "DELETE FROM cliente WHERE codcli = '" . $codcli . "'";
         $conn->query($sql);
+    }
+
+    public static function buscar($codCli) {
+        echo "Buscando cliente " . $codCli . "<br>";
+        $conn = ConexaoBD::getInstance()->getConexao();
+        $sql = "SELECT * FROM cliente WHERE codcli = '" . $codCli . "'";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $cliente = new Cliente($row["codcli"], $row["nome"], $row["endereco"], $row["bairro"], $row["cep"],
+                $row["telefone"], $row['cpf'] , $row["ie"], $row["codcid"]);
+
+            if ($cliente->getCodCid() == "") {
+                $cliente->setCodCid(null);
+            }
+
+            if ($cliente->getIe() == "") {
+                $cliente->setIe(null);
+            }
+
+            return $cliente;
+        }
+
+        return null;
     }
 
 }

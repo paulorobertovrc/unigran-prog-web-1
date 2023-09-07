@@ -14,7 +14,11 @@ class ClienteController implements ModelController {
 
         if ($cliente->getCodCid() == "") {
             $cliente->setCodCid(0);
-        } // TODO: Fix this hack
+        }
+
+        if ($cliente->getIe() == "") {
+            $cliente->setIe(0);
+        }
 
         Cliente::incluir($cliente);
     }
@@ -22,11 +26,24 @@ class ClienteController implements ModelController {
     public function alterar() {
         $cliente = new Cliente($_POST['codcli'], $_POST['nome'], $_POST['endereco'], $_POST['bairro'], $_POST['cep'],
             $_POST['telefone'], $_POST['cpf'] , $_POST['ie'], $_POST['cidade']);
+
+        if ($cliente->getCodCid() == "") {
+            $cliente->setCodCid(0);
+        }
+
+        if ($cliente->getIe() == "") {
+            $cliente->setIe(0);
+        }
+
         Cliente::alterar($cliente);
     }
 
     public function excluir() {
-        Cliente::excluir($_POST['codcli']);
+        Cliente::excluir($_POST['excluirCliente']);
+    }
+
+    public function buscar($codCli) {
+        return Cliente::buscar($codCli);
     }
 
 }

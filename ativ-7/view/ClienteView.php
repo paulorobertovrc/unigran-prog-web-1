@@ -64,70 +64,59 @@
             echo "<td>" . $cliente->getCpf() . "</td>";
             echo "<td>" . $cliente->getIe() . "</td>";
             echo "<td>" . $cliente->getCodCid() . "</td>";
-            echo "<td><button type='submit' name='alterar' id='alterarCliente' value='". $cliente->getCodcli()
+            echo "<td><button type='submit' name='alterarCliente' id='alterarCliente' value='". $cliente->getCodcli()
                 .  "'>Alterar</button></td>";
-            echo "<td><button type='submit' name='excluir' id='excluirCliente' value='". $cliente->getCodcli()
+            echo "<td><button type='submit' name='excluirCliente' id='excluirCliente' value='". $cliente->getCodcli()
                 .  "'>Excluir</button></td>";
             echo "</tr>";
             echo "</form>";
         }
-        ?>
-    </table>
 
-    <?php
-    if (isset($_POST['alterarCliente'])) {
-        $clienteSelecionado = new Cliente(null, null, null, null, null, null,
-            null, null, null);
+        echo "</table><br><br>";
 
-        foreach ($clientes as $cliente) {
-            if ($cliente->getCodcli() == $_POST['alterarCliente']) {
-                $clienteSelecionado->setCodcli($cliente->getCodcli());
-                $clienteSelecionado->setNome($cliente->getNome());
-                $clienteSelecionado->setEndereco($cliente->getEndereco());
-                $clienteSelecionado->setBairro($cliente->getBairro());
-                $clienteSelecionado->setCep($cliente->getCep());
-                $clienteSelecionado->setTelefone($cliente->getTelefone());
-                $clienteSelecionado->setCpf($cliente->getCpf());
-                $clienteSelecionado->setIe($cliente->getIe());
-                $clienteSelecionado->setCodCid($cliente->getCodCid());
-            }
+        if (isset($_POST['alterarCliente'])) {
+            require_once 'controller/ClienteController.php';
+            $controller = new ClienteController();
+
+            $codCli = $_POST['alterarCliente'];
+            $clienteSelecionado = $controller->buscar($codCli);
+
+            echo "<h3>ALTERANDO CLIENTE " . $clienteSelecionado->getCodcli() . "</h3>";
+
+            echo "<form method='post' id='formAlterar' name='formAlterar'>";
+            echo "<label for='nome'>Nome</label>";
+            echo "<input type='text' name='nome' id='nome' value='" . $clienteSelecionado->getNome() . "'>";
+            echo "<label>Endereço</label>";
+            echo "<input type='text' name='endereco' id='endereco' value='" . $clienteSelecionado->getEndereco() . "'>";
+            echo "<label>Bairro</label>";
+            echo "<input type='text' name='bairro' id='bairro' value='" . $clienteSelecionado->getBairro() . "'>";
+            echo "<label>CEP</label>";
+            echo "<input type='text' name='cep' id='cep' value='" . $clienteSelecionado->getCep() . "'>";
+            echo "<label>Telefone</label>";
+            echo "<input type='text' name='telefone' id='telefone' value='" . $clienteSelecionado->getTelefone()
+                . "'>";
+            echo "<label>CPF</label>";
+            echo "<input type='text' name='cpf' id='cpf' value='" . $clienteSelecionado->getCpf() . "'>";
+            echo "<label>IE</label>";
+            echo "<input type='text' name='ie' id='ie' value='" . $clienteSelecionado->getIe() . "'>";
+            echo "<label>Cidade</label>";
+            echo "<input type='text' name='cidade' id='cidade' value='" . $clienteSelecionado->getCodCid() . "'>";
+            echo "<input type='hidden' name='codcli' id='codcli' value='" . $clienteSelecionado->getCodcli() . "'>";
+            echo "<input type='submit' value='Atualizar' name='formAlterar' id='formAlterar'>";
+            echo "</form>";
         }
 
-        echo "<h3>ALTERANDO CLIENTE " . $clienteSelecionado->getCodcli() . "</h3>";
-        echo "<form method='post' id='formAlterarCliente' name='formAlterarCliente'>";
-        echo "<label>Nome<input type='text' name='nome' id='nome' value='" . $clienteSelecionado->getNome() . "'>
-        </label>";
-        echo "<label>Endereço<input type='text' name='endereco' id='endereco' value='"
-            . $clienteSelecionado->getEndereco() . "'></label>";
-        echo "<label>Bairro<input type='text' name='bairro' id='bairro' value='" . $clienteSelecionado->getBairro() .
-            "'></label>";
-        echo "<label>CEP<input type='text' name='cep' id='cep' value='" . $clienteSelecionado->getCep() . "'></label>";
-        echo "<label>Telefone<input type='text' name='telefone' id='telefone' value='"
-            . $clienteSelecionado->getTelefone() . "'></label>";
-        echo "<label>CPF<input type='text' name='cpf' id='cpf' value='" . $clienteSelecionado->getCpf() . "'></label>";
-        echo "<label>IE<input type='text' name='ie' id='ie' value='" . $clienteSelecionado->getIe() . "'></label>";
-        echo "<label>Cidade<input type='text' name='cidade' id='cidade' value='" . $clienteSelecionado->getCodCid()
-            . "'></label>";
-        echo "<input type='hidden' name='codcli' id='codcli' value='" . $clienteSelecionado->getCodcli() . "'>";
-        echo "<input type='hidden' name='confirmarAlteracaoCliente' id='confirmarAlteracaoCliente' 
-            value='confirmarAlteracaoCliente'>";
-        echo "<td><button type='submit' name='alterarCliente' id='alterarCliente' value='alterarCliente'>Alterar
-            </button></td>";
-        echo "<td><button type='submit' name='cancelar' id='cancelar' value='cancelar'>Cancelar</button></td>";
-        echo "</form>";
-
-        if (isset($_POST['confirmarAlteracaoCliente'])) { // TODO: CORRIGIR O botão de alterar cliente abre o campo para alterar produto
-            $controller = new ClienteController();
-            $controller->alterar();
+        if (isset($_POST['formAlterar'])) {
+            $controlador = new ClienteController();
+            $controlador->alterar();
             header("Location: index.php");
         }
-    }
 
-    if (isset($_POST['excluir'])) {
-        $codCli = $_POST['excluir'];
-        $controller = new ClienteController();
-        $controller->excluir();
-        header("Location: index.php");
-    }
-    ?>
+        if (isset($_POST['excluirCliente'])) {
+            $codCli = $_POST['excluirCliente'];
+            $controller = new ClienteController();
+            $controller->excluir();
+            header("Location: index.php");
+        }
+        ?>
 </div>
