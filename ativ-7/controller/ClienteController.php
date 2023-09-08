@@ -8,15 +8,18 @@ class ClienteController implements ModelController {
         require_once 'view/ClienteView.php';
     }
 
-    public function incluir() {
+    /**
+     * @throws EntidadeNaoEncontradaException
+     */
+    public function incluir(): void {
         $cliente = new ClienteDto($_POST['nome'], $_POST['endereco'], $_POST['bairro'], $_POST['cep'],
             $_POST['telefone'], $_POST['cpf'] , $_POST['ie'], $_POST['cidade']);
 
-        if ($cliente->getCodCid() == "") {
-            $cliente->setCodCid(0);
+        if (empty($cliente->getCodCid())) {
+            return;
         }
 
-        if ($cliente->getIe() == "") {
+        if (empty($cliente->getIe())) {
             $cliente->setIe(0);
         }
 
@@ -26,14 +29,6 @@ class ClienteController implements ModelController {
     public function alterar() {
         $cliente = new Cliente($_POST['codcli'], $_POST['nome'], $_POST['endereco'], $_POST['bairro'], $_POST['cep'],
             $_POST['telefone'], $_POST['cpf'] , $_POST['ie'], $_POST['cidade']);
-
-        if ($cliente->getCodCid() == "") {
-            $cliente->setCodCid(0);
-        }
-
-        if ($cliente->getIe() == "") {
-            $cliente->setIe(0);
-        }
 
         Cliente::alterar($cliente);
     }

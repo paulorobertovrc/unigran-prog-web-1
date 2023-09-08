@@ -112,10 +112,19 @@ class Cliente {
         return $clientes;
     }
 
-    public static function incluir(ClienteDto $cliente) {
-        echo "Incluindo cliente " . $cliente->getNome() . "<br>";
-        echo "Cidade: " . $cliente->getCodCid() . "<br>";
+    /**
+     * @throws EntidadeNaoEncontradaException
+     */
+    public static function incluir(ClienteDto $cliente): void {
         $conn = ConexaoBD::getInstance()->getConexao();
+
+        try {
+            Cidade::buscar($cliente->getCodCid());
+        } catch (EntidadeNaoEncontradaException $e) {
+            echo $e->getMessage();
+            return;
+        }
+
         $sql = "INSERT INTO cliente (nome, endereco, bairro, cep, telefone, cpf, ie, codcid) VALUES ('"
             . $cliente->getNome() . "', '" . $cliente->getEndereco() . "', '" . $cliente->getBairro() . "', '"
             . $cliente->getCep() . "', '" . $cliente->getTelefone() . "', '" . $cliente->getCpf(). "', '"
@@ -123,11 +132,14 @@ class Cliente {
         $conn->query($sql);
     }
 
-    public static function alterar($cliente) {
+    public static function alterar($cliente): void {
         $clienteAlterado = $cliente;
 
-        if ($clienteAlterado->getCodCid() == "") {
-            $clienteAlterado->setCodCid(0);
+        try {
+            Cidade::buscar($clienteAlterado->getCodCid());
+        } catch (EntidadeNaoEncontradaException $e) {
+            echo $e->getMessage();
+            return;
         }
 
         if ($clienteAlterado->getIe() == "") {
@@ -142,18 +154,19 @@ class Cliente {
             . "cep = '" . $clienteAlterado->getCep() . "', "
             . "telefone = '" . $clienteAlterado->getTelefone() . "', "
             . "cpf = '" . $clienteAlterado->getCpf() . "', "
-            . "ie = '" . $clienteAlterado->getIe() . "' "
+            . "ie = '" . $clienteAlterado->getIe() . "', "
+            . "codcid = '" . $clienteAlterado->getCodCid() . "' "
             . "WHERE codcli = '" . $clienteAlterado->getCodcli() . "'";
         $conn->query($sql);
     }
 
-    public static function excluir($codcli) {
+    public static function excluir($codcli): void {
         $conn = ConexaoBD::getInstance()->getConexao();
         $sql = "DELETE FROM cliente WHERE codcli = '" . $codcli . "'";
         $conn->query($sql);
     }
 
-    public static function buscar($codCli) {
+    public static function buscar($codCli): ?Cliente {
         echo "Buscando cliente " . $codCli . "<br>";
         $conn = ConexaoBD::getInstance()->getConexao();
         $sql = "SELECT * FROM cliente WHERE codcli = '" . $codCli . "'";

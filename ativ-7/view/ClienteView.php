@@ -63,7 +63,7 @@
             echo "<td>" . $cliente->getTelefone() . "</td>";
             echo "<td>" . $cliente->getCpf() . "</td>";
             echo "<td>" . $cliente->getIe() . "</td>";
-            echo "<td>" . $cliente->getCodCid() . "</td>";
+            echo "<td>" . Cidade::buscar($cliente->getCodCid())->getNome() . "</td>";
             echo "<td><button type='submit' name='alterarCliente' id='alterarCliente' value='". $cliente->getCodcli()
                 .  "'>Alterar</button></td>";
             echo "<td><button type='submit' name='excluirCliente' id='excluirCliente' value='". $cliente->getCodcli()
