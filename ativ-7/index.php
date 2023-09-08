@@ -1,6 +1,5 @@
 <?php
 require_once 'infra/ConexaoBD.php';
-require_once 'controller/CadastrarController.php';
 require_once 'controller/ModelController.php';
 
 $conn = ConexaoBD::getInstance();
@@ -30,10 +29,6 @@ $conn = ConexaoBD::getInstance();
     foreach ($modelControllers as $controlador) {
         if (file_exists("controller/" . $controlador . ".php")) {
             include_once "controller/" . $controlador . ".php";
-            echo "<h2>" . strtoupper(str_replace("Controller", "", $controlador)) . "</h2>";
-
-            $controladorCadastro = new CadastrarController();
-            $controladorCadastro->exibirFormulario();
 
             $request = new $controlador();
             $request->listar();
