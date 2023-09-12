@@ -32,8 +32,9 @@
         <?php
         $produtos = $_REQUEST['produtos'];
 
+        echo "<form method='post' id='form' name='form'>";
+
         foreach ($produtos as $produto) {
-            echo "<form method='post' id='form' name='form'>";
             echo "<tr>";
             echo "<td>" . $produto->getCodprod() . "</td>";
             echo "<td>" . $produto->getDescricao() . "</td>";
@@ -44,8 +45,9 @@
             echo "<td><button type='submit' name='excluir' id='excluir' value='". $produto->getCodprod()
                 .  "'>Excluir</button></td>";
             echo "</tr>";
-            echo "</form>";
         }
+
+        echo "</form>";
         ?>
     </table>
 
@@ -88,5 +90,6 @@
         Produto::excluir($codProd);
         header("Location: index.php");
     }
+
     ?>
 </div>
