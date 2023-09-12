@@ -3,23 +3,23 @@ require_once 'model/Setor.php';
 require_once 'model/SetorDto.php';
 
 class SetorController implements ModelController {
-    public function listar() {
+    public function listar(): void {
         $_REQUEST['setores'] = Setor::listar();
         require_once 'view/SetorView.php';
     }
 
-    public function incluir() {
+    public function incluir(): void {
         $setor = new SetorDto($_POST['nomeSetor']);
         Setor::incluir($setor);
     }
 
-    public function alterar() {
-//        $cidade = new Cidade($_POST['codCid'], $_POST['nome'], $_POST['uf']);
-//        Cidade::alterar($cidade);
+    public function alterar(): void {
+        $setor = new SetorDto($_POST['nomeSetor']);
+        Setor::alterar($setor);
     }
 
-    public function excluir() {
-//        Cidade::excluir($_POST['codCid']);
+    public function excluir(): void {
+        Setor::excluir($_POST['codSetor']);
     }
 
 }

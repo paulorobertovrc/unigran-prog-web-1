@@ -48,7 +48,7 @@ class Setor {
 
     }
 
-    public static function alterar(Setor $setor) {
+    public static function alterar($setor) {
         $conn = ConexaoBD::getInstance()->getConexao();
         $sql = "UPDATE setor SET nomesetor = '" . $setor->getNomeSetor() . "' WHERE codsetor = "
             . $setor->getCodSetor();

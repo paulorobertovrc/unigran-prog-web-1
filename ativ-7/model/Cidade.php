@@ -50,6 +50,13 @@ class Cidade {
 
     }
 
+    public static function alterar(Cidade $cidade) {
+        $conn = ConexaoBD::getInstance()->getConexao();
+        $sql = "UPDATE cidade SET nomecid = '" . $cidade->getNome() . "', uf = '" . $cidade->getUf()
+            . "' WHERE codcid = " . $cidade->getCodCid();
+        $conn->query($sql);
+    }
+
     public function getCodCid() {
         return $this->codCid;
     }
@@ -72,6 +79,12 @@ class Cidade {
 
     public function setUf($uf) {
         $this->uf = $uf;
+    }
+
+    public static function excluir(mixed $codCid) {
+        $conn = ConexaoBD::getInstance()->getConexao();
+        $sql = "DELETE FROM cidade WHERE codcid = " . $codCid;
+        $conn->query($sql);
     }
 
 }

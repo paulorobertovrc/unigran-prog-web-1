@@ -14,12 +14,12 @@ class CidadeController implements ModelController {
     }
 
     public function alterar() {
-//        $cidade = new Cidade($_POST['codCid'], $_POST['nome'], $_POST['uf']);
-//        Cidade::alterar($cidade);
+        $cidade = new Cidade($_POST['codCid'], $_POST['nome'], $_POST['uf']);
+        Cidade::alterar($cidade);
     }
 
     public function excluir() {
-//        Cidade::excluir($_POST['codCid']);
+        Cidade::excluir($_POST['codCid']);
     }
 
 }
